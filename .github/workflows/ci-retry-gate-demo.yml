@@ -1,0 +1,41 @@
+name: CI Retry Gate demonstration
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  evidence-gate:
+    name: Read-only evidence gate for GEOPHIRES-X
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assess reproduced py39 failure
+        id: gate
+        uses: achirothmane/workflow-failure-lab@main
+        with:
+          github-token: ${{ github.token }}
+          repository: achirothmane/GEOPHIRES-X
+          run-id: '36152201895'
+          run-attempt: '1'
+          auto-rerun: 'false'
+          selective-rerun: 'false'
+          comment-on-pr: 'false'
+
+      - name: Demonstration summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## CI Retry Gate — GEOPHIRES-X #526 reproduction"
+            echo
+            echo "- Evidence run: achirothmane/GEOPHIRES-X/actions/runs/36152201895"
+            echo "- Target: py39 (ubuntu)"
+            echo "- Mode: read-only; no rerun; no upstream mutation"
+            echo "- Decision: \`${{ steps.gate.outputs.decision }}\`"
+            echo "- Evidence status: \`${{ steps.gate.outputs.evidence-status }}\`"
+            echo "- Category: \`${{ steps.gate.outputs.category }}\`"
+            echo "- Reason: \`${{ steps.gate.outputs.reason }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
