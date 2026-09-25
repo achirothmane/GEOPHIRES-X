@@ -36,6 +36,6 @@ jobs:
             echo "- Mode: read-only; no rerun; no upstream mutation"
             echo "- Decision: \`${{ steps.gate.outputs.decision }}\`"
             echo "- Evidence status: \`${{ steps.gate.outputs.evidence-status }}\`"
-            echo "- Category: \`${{ steps.gate.outputs.category }}\`"
+            echo '- Failed-job evidence: `${{ steps.gate.outputs.failed-jobs-json }}`'
             echo "- Reason: \`${{ steps.gate.outputs.reason }}\`"
           } >> "$GITHUB_STEP_SUMMARY"
